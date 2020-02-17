@@ -8,19 +8,10 @@ server.use(express.json());
 
 server.get("/api/accounts", (req, res) => {
     const query = req.query;
-    if(!query.sortby) {
+    if(query) {
         db('accounts')
-        .orderBy("id", query.sortdir || 'asc')
+        .orderBy(query.sortby || "id", query.sortdir || 'asc')
         .limit(query.limit || null)
-        .then(accounts => {
-            res.status(200).json(accounts);
-        }) 
-        .catch (err => {
-            res.status(500).json({ message: 'Failed to get users' });
-        });
-    } else if(query.sortby) {
-        db('accounts')
-        .where({ id: query.sortby })
         .then(accounts => {
             res.status(200).json(accounts);
         }) 
